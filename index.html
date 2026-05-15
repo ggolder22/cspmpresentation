@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSPM — Activos Fotovoltaicos Certificados para Minería</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:#C8A84B; --gold-light:#E2C97E;
+    --dark:#0A0D0F; --dark2:#111518; --dark3:#1A1F24;
+    --muted:#6B7A8D; --light:#E8ECF0; --white:#F5F7FA;
+    --green:#2ECC8A; --green-dark:#1a8a5a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--dark);color:var(--white);font-family:'Barlow',sans-serif;overflow-x:hidden;}
+
+  nav{position:fixed;top:0;left:0;right:0;background:rgba(10,13,15,0.95);backdrop-filter:blur(12px);padding:16px 10%;display:flex;align-items:center;justify-content:space-between;z-index:100;border-bottom:1px solid rgba(200,168,75,0.12);}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:4px;}
+  .nav-links{display:flex;gap:28px;list-style:none;}
+  .nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--gold);}
+
+  /* COVER */
+  .cover{min-height:100vh;padding:130px 10% 90px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+  .cover-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 80% 50%,rgba(44,85,44,0.2) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 15% 75%,rgba(200,168,75,0.07) 0%,transparent 60%);}
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(200,168,75,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,168,75,0.03) 1px,transparent 1px);background-size:64px 64px;}
+  .cover-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:28px;position:relative;z-index:2;display:flex;align-items:center;gap:12px;}
+  .cover-tag::before{content:'';display:block;width:30px;height:1px;background:var(--gold);}
+  .cover h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,8vw,92px);line-height:0.95;color:var(--white);position:relative;z-index:2;}
+  .cover h1 .gold{color:var(--gold);}
+  .cover h1 .grn{color:var(--green);}
+  .cover-sub{font-size:17px;font-weight:300;color:var(--muted);margin-top:24px;max-width:560px;position:relative;z-index:2;line-height:1.65;}
+
+  .pillars{display:flex;gap:2px;margin-top:52px;position:relative;z-index:2;}
+  .pillar{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(200,168,75,0.12);padding:24px 18px;text-align:center;transition:background 0.3s,border-color 0.3s;}
+  .pillar:hover{background:rgba(200,168,75,0.06);border-color:rgba(200,168,75,0.3);}
+  .pillar .icon{font-size:26px;margin-bottom:10px;}
+  .pillar h4{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+  .pillar p{font-size:12px;color:var(--muted);line-height:1.5;}
+
+  .cover-cred{position:relative;z-index:2;margin-top:44px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(200,168,75,0.15);padding-top:28px;}
+  .cred-badge{background:rgba(46,204,138,0.08);border:1px solid rgba(46,204,138,0.3);padding:9px 14px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--green);text-transform:uppercase;}
+
+  /* SECTIONS */
+  .section{padding:90px 10%;position:relative;}
+  .section-dark{background:var(--dark2);}
+  .section-slate{background:var(--dark3);}
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+  .section-label::before{content:'';display:block;width:24px;height:1px;background:var(--gold);}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,58px);line-height:1;margin-bottom:48px;color:var(--white);}
+  .section-title span{color:var(--gold);}
+  .section-title .grn{color:var(--green);}
+
+  /* CO2 HERO */
+  .co2-hero{background:var(--dark);padding:80px 10%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;border-top:1px solid rgba(200,168,75,0.1);border-bottom:1px solid rgba(200,168,75,0.1);}
+  .co2-number{text-align:center;}
+  .co2-number h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(80px,12vw,140px);color:var(--gold);line-height:0.9;}
+  .co2-number .co2-unit{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,44px);color:var(--gold-light);letter-spacing:2px;}
+  .co2-number p{font-size:13px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:12px;line-height:1.5;}
+  .co2-breakdown{display:flex;flex-direction:column;gap:2px;}
+  .co2-breakdown h3{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+  .co2-row{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--dark3);}
+  .co2-row .co2-label{display:flex;gap:12px;align-items:center;font-size:14px;color:var(--light);}
+  .co2-row .co2-label .step-n{font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(200,168,75,0.3);width:24px;}
+  .co2-row .co2-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);}
+  .co2-row.dominant{background:rgba(46,204,138,0.06);border-left:3px solid var(--green);}
+  .co2-row.dominant .co2-val{color:var(--green);}
+  .co2-total-row{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;background:var(--gold);margin-top:2px;}
+  .co2-total-row span{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--dark);letter-spacing:2px;}
+  .co2-total-row .tot-val{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--dark);}
+
+  /* EQUIVALENCIAS */
+  .equiv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:0;}
+  .equiv-card{background:var(--dark3);padding:32px 24px;text-align:center;border-bottom:3px solid transparent;transition:border-color 0.3s;}
+  .equiv-card:hover{border-color:var(--gold);}
+  .equiv-card .e-icon{font-size:36px;margin-bottom:12px;}
+  .equiv-card h3{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);line-height:1;margin-bottom:8px;}
+  .equiv-card p{font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;line-height:1.5;}
+
+  /* 4 ACTIVOS */
+  .buy-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+  .buy-card{background:var(--dark3);padding:38px 34px;position:relative;overflow:hidden;border-bottom:3px solid transparent;transition:border-color 0.3s;}
+  .buy-card:hover{border-color:var(--gold);}
+  .buy-card::before{content:attr(data-num);position:absolute;top:-10px;right:20px;font-family:'Bebas Neue',sans-serif;font-size:96px;color:rgba(200,168,75,0.04);line-height:1;}
+  .buy-card .card-icon{font-size:30px;margin-bottom:14px;}
+  .buy-card h3{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:1px;margin-bottom:10px;}
+  .buy-card p{font-size:14px;color:var(--muted);line-height:1.7;}
+  .buy-card .card-detail{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:var(--white);line-height:1.6;}
+  .buy-card .card-detail strong{color:var(--green);}
+
+  /* ORIGIN FLOW */
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;}
+  .flow-step{background:var(--dark2);padding:28px 20px;position:relative;}
+  .flow-step::after{content:'→';position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:18px;z-index:2;}
+  .flow-step:last-child::after{display:none;}
+  .flow-num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:rgba(200,168,75,0.15);line-height:1;margin-bottom:8px;}
+  .flow-step h4{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+  .flow-step p{font-size:12px;color:var(--muted);line-height:1.5;}
+
+  /* TECH */
+  .tech-layout{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;}
+  .tech-screen{background:var(--dark2);border:1px solid rgba(200,168,75,0.15);padding:26px;}
+  .screen-bar{display:flex;gap:6px;margin-bottom:18px;}
+  .screen-bar span{width:10px;height:10px;border-radius:50%;background:var(--dark3);}
+  .screen-bar span:first-child{background:#E05252;}
+  .screen-bar span:nth-child(2){background:#E0A952;}
+  .screen-bar span:nth-child(3){background:var(--green);}
+  .screen-id{font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;}
+  .screen-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
+  .screen-row .lbl{color:var(--muted);}
+  .screen-row .val{color:var(--white);font-weight:600;}
+  .screen-row .val.ok{color:var(--green);}
+  .screen-row .val.gold{color:var(--gold);}
+  .screen-total{margin-top:14px;padding:14px;background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.2);display:flex;justify-content:space-between;align-items:center;}
+  .screen-total .st-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;}
+  .screen-total .st-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);}
+
+  .tech-features{display:flex;flex-direction:column;gap:22px;}
+  .feat{display:flex;gap:18px;align-items:flex-start;}
+  .feat-icon{width:40px;height:40px;background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .feat h4{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;color:var(--white);margin-bottom:4px;}
+  .feat p{font-size:13px;color:var(--muted);line-height:1.5;}
+
+  /* CATEGORIES */
+  .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:32px;}
+  .cat-card{background:var(--dark2);padding:34px 26px;border-top:3px solid var(--gold);}
+  .cat-label{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--gold);line-height:1;margin-bottom:10px;letter-spacing:2px;}
+  .cat-card h4{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;color:var(--white);text-transform:uppercase;margin-bottom:10px;}
+  .cat-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+  .cat-spec{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;color:var(--white);}
+  .cat-spec strong{color:var(--green);}
+  .cat-co2{margin-top:8px;font-size:13px;color:var(--gold);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;}
+
+  /* USES */
+  .uses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+  .use-card{background:var(--dark2);padding:30px 26px;border-left:3px solid transparent;transition:border-color 0.3s;}
+  .use-card:hover{border-color:var(--green);}
+  .use-card .use-icon{font-size:30px;margin-bottom:12px;}
+  .use-card h4{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;color:var(--white);text-transform:uppercase;margin-bottom:8px;}
+  .use-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+  .use-tag{display:inline-block;margin-top:10px;padding:4px 10px;background:rgba(46,204,138,0.08);border:1px solid rgba(46,204,138,0.2);font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--green);text-transform:uppercase;}
+
+  /* ESG */
+  .esg-layout{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;}
+  .esg-text h2{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--white);line-height:1;margin-bottom:18px;}
+  .esg-text h2 span{color:var(--green);}
+  .esg-text p{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:14px;}
+  .esg-checklist{display:flex;flex-direction:column;}
+  .esg-check{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+  .check-icon{color:var(--green);font-size:17px;flex-shrink:0;margin-top:2px;}
+  .esg-check h5{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--white);text-transform:uppercase;margin-bottom:4px;}
+  .esg-check p{font-size:13px;color:var(--muted);line-height:1.5;}
+
+  /* COMMUNITY */
+  .community-band{background:linear-gradient(135deg,#0D1A0D,#111E11,#0A130A);border-top:1px solid rgba(46,204,138,0.15);border-bottom:1px solid rgba(46,204,138,0.15);padding:72px 10%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+  .comm-left h2{font-family:'Bebas Neue',sans-serif;font-size:50px;color:var(--green);line-height:1;margin-bottom:18px;}
+  .comm-left p{font-size:15px;color:var(--light);line-height:1.7;}
+  .comm-items{display:flex;flex-direction:column;gap:14px;}
+  .comm-item{display:flex;gap:14px;align-items:flex-start;}
+  .comm-dot{width:8px;height:8px;background:var(--green);border-radius:50%;flex-shrink:0;margin-top:6px;}
+  .comm-item p{font-size:14px;color:var(--light);line-height:1.6;}
+  .comm-item p span{color:var(--muted);font-size:13px;display:block;}
+
+  /* CRED */
+  .cred-section{background:var(--dark2);padding:48px 10%;display:flex;align-items:center;gap:48px;}
+  .cred-seal{width:110px;height:110px;border:2px solid var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);flex-shrink:0;text-align:center;line-height:1.2;position:relative;}
+  .cred-seal::before{content:'';position:absolute;inset:7px;border:1px solid rgba(46,204,138,0.25);border-radius:50%;}
+  .cred-content h3{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--green);letter-spacing:2px;margin-bottom:8px;}
+  .cred-content p{font-size:14px;color:var(--muted);max-width:700px;line-height:1.6;}
+
+  /* QUOTE */
+  .quote-band{background:var(--gold);padding:52px 10%;text-align:center;}
+  .quote-band blockquote{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,44px);color:var(--dark);letter-spacing:2px;line-height:1.2;}
+  .quote-band cite{display:block;font-family:'Barlow',sans-serif;font-size:12px;font-style:normal;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(10,13,15,0.55);margin-top:14px;}
+
+  /* CTA */
+  .cta-section{padding:100px 10%;background:var(--dark);display:grid;grid-template-columns:2fr 1fr;gap:80px;align-items:center;border-top:1px solid rgba(200,168,75,0.12);}
+  .cta-section h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(34px,5vw,60px);line-height:1;color:var(--white);}
+  .cta-section h2 span{color:var(--gold);}
+  .cta-section p{margin-top:16px;font-size:15px;color:var(--muted);max-width:500px;line-height:1.7;}
+  .cta-right{display:flex;flex-direction:column;gap:12px;}
+  .cta-btn{background:var(--gold);color:var(--dark);padding:18px 32px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;text-align:center;text-decoration:none;display:block;transition:background 0.2s;}
+  .cta-btn:hover{background:var(--gold-light);}
+  .cta-btn.outline{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+  .cta-btn.outline:hover{background:rgba(200,168,75,0.07);}
+  .contact-info{font-size:12px;color:var(--muted);letter-spacing:1px;text-align:center;margin-top:4px;line-height:1.7;}
+
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background:var(--dark);}
+  ::-webkit-scrollbar-thumb{background:var(--gold);}
+
+  @media(max-width:900px){
+    .buy-grid,.uses-grid,.esg-layout,.community-band,.cta-section,.flow,.cat-grid,.tech-layout,.co2-hero,.equiv-grid{grid-template-columns:1fr;}
+    .pillars{flex-direction:column;}
+    nav{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">CSPM</div>
+  <ul class="nav-links">
+    <li><a href="#co2">Impacto CO₂</a></li>
+    <li><a href="#valor">Valor</a></li>
+    <li><a href="#origen">Origen</a></li>
+    <li><a href="#tecnologia">Tecnología</a></li>
+    <li><a href="#esg">ESG</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="cover-bg"></div>
+  <div class="grid-bg"></div>
+  <div class="cover-tag">Circularidad Solar & Photovoltaic Management · San Juan, Argentina</div>
+  <h1>Un panel solar.<br><span class="gold">Cuatro activos.</span><br><span class="grn">2.74 toneladas</span><br>de CO₂ evitado.</h1>
+  <p class="cover-sub">CSPM recupera y certifica paneles fotovoltaicos de parques solares en retiro. Cada panel entregado evita 2.74 toneladas de CO₂eq — documentadas, auditables, listas para tus reportes ESG desde el día uno.</p>
+  <div class="pillars">
+    <div class="pillar"><div class="icon">⚡</div><h4>Energía Real</h4><p>Paneles certificados IEC, listos para instalar y generar</p></div>
+    <div class="pillar"><div class="icon">🌿</div><h4>2.74 t CO₂eq</h4><p>Evitadas por panel — ciclo de vida completo documentado</p></div>
+    <div class="pillar"><div class="icon">📊</div><h4>ESG Auditable</h4><p>GRI · SASB · Scope 2 & 3 · TCFD desde el día uno</p></div>
+    <div class="pillar"><div class="icon">🤝</div><h4>Impacto Social</h4><p>Licencia social con activos verificables en territorio</p></div>
+  </div>
+  <div class="cover-cred">
+    <div class="cred-badge">✓ Único operador RAEE-FV habilitado · San Juan</div>
+    <div class="cred-badge">✓ Certificación IEC 61215 · IEC 61730</div>
+    <div class="cred-badge">✓ Metodología CO₂ basada en fuentes IMO · IEA · Sec. Energía Argentina</div>
+  </div>
+</section>
+
+<!-- CO2 HERO -->
+<section class="co2-hero" id="co2">
+  <div class="co2-number">
+    <h2>2.74</h2>
+    <div class="co2-unit">TONELADAS CO₂eq</div>
+    <p>evitadas por cada panel<br>CSPM recuperado<br>(Categoría A · San Juan · 10 años)</p>
+  </div>
+  <div class="co2-breakdown">
+    <h3>De dónde viene ese número</h3>
+    <div class="co2-row">
+      <div class="co2-label"><span class="step-n">E1</span>Fabricación evitada — extracción + manufactura China</div>
+      <div class="co2-val">217 kg</div>
+    </div>
+    <div class="co2-row">
+      <div class="co2-label"><span class="step-n">E2</span>Transporte evitado — flete marítimo + terrestre a San Juan</div>
+      <div class="co2-val">5 kg</div>
+    </div>
+    <div class="co2-row">
+      <div class="co2-label"><span class="step-n">E3</span>Disposición final evitada — vertedero / RAEE</div>
+      <div class="co2-val">21 kg</div>
+    </div>
+    <div class="co2-row dominant">
+      <div class="co2-label"><span class="step-n">E4</span>Generación limpia 10 años vs. red eléctrica argentina</div>
+      <div class="co2-val">2,500 kg</div>
+    </div>
+    <div class="co2-total-row">
+      <span>TOTAL CO₂eq EVITADO</span>
+      <span class="tot-val">2,743 kg</span>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIVALENCIAS -->
+<section class="section section-dark">
+  <div class="section-label">Para dimensionarlo</div>
+  <h2 class="section-title">2.74 toneladas equivale a...</h2>
+  <div class="equiv-grid">
+    <div class="equiv-card">
+      <div class="e-icon">✈️</div>
+      <h3>1</h3>
+      <p>Vuelo Buenos Aires ↔ Europa<br>ida y vuelta · por persona</p>
+    </div>
+    <div class="equiv-card">
+      <div class="e-icon">🚗</div>
+      <h3>17.000</h3>
+      <p>Kilómetros recorridos<br>en un auto a nafta</p>
+    </div>
+    <div class="equiv-card">
+      <div class="e-icon">🏠</div>
+      <h3>16</h3>
+      <p>Meses del consumo eléctrico<br>de un hogar argentino promedio</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALOR -->
+<section class="section section-slate" id="valor">
+  <div class="section-label">La propuesta</div>
+  <h2 class="section-title">Con una sola decisión,<br><span>cuatro problemas resueltos</span></h2>
+  <div class="buy-grid">
+    <div class="buy-card" data-num="01">
+      <div class="card-icon">⚡</div>
+      <h3>Energía Real y Verificada</h3>
+      <p>Paneles con capacidad residual certificada bajo protocolos IEC. Listos para instalar y generar desde el día uno. Cada unidad entrega potencia documentada, no estimada.</p>
+      <div class="card-detail">Diagnóstico por curva IV · Termografía infrarroja · Análisis estructural · <strong>Capacidad verificada por unidad</strong></div>
+    </div>
+    <div class="buy-card" data-num="02">
+      <div class="card-icon">🌿</div>
+      <h3>2.74 Toneladas de CO₂eq Certificadas</h3>
+      <p>Ciclo de vida completo documentado: fabricación evitada + transporte evitado + disposición final evitada + 10 años de generación limpia vs. red argentina. Cada componente con fuente citada.</p>
+      <div class="card-detail"><strong>Fuentes: Hanwha Q CELLS LCA · IMO GHG Study 2020 · GLEC Framework · Secretaría de Energía Argentina</strong></div>
+    </div>
+    <div class="buy-card" data-num="03">
+      <div class="card-icon">📊</div>
+      <h3>Documentación ESG Lista</h3>
+      <p>Generada automáticamente por el sistema CSPM en el momento del diagnóstico. Compatible con los estándares que tus auditores ya exigen. Sin trabajo adicional de tu equipo.</p>
+      <div class="card-detail">GRI 306 · SASB EM-MM-150a.1 · Scope 2 & Scope 3 · TCFD · <strong>Lista desde el día de entrega</strong></div>
+    </div>
+    <div class="buy-card" data-num="04">
+      <div class="card-icon">🤝</div>
+      <h3>Impacto Social Documentado</h3>
+      <p>Paneles de economía circular aplicados en comunidades del área de influencia. Electrificación de escuelas, centros de salud, instalaciones comunitarias — con trazabilidad completa del impacto.</p>
+      <div class="card-detail"><strong>Licencia social con activos reales</strong> · Documentación de impacto para reportes institucionales y RRSS</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGEN -->
+<section class="section section-dark" id="origen">
+  <div class="section-label">El proceso</div>
+  <h2 class="section-title">De parque solar en retiro<br><span>a activo en tu operación</span></h2>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num">01</div><h4>Recepción</h4><p>Paneles de parques solares. Trazabilidad de origen documentada desde el primer contacto.</p></div>
+    <div class="flow-step"><div class="flow-num">02</div><h4>Clasificación</h4><p>Sistema propio CSPM. Categoría A, B o C asignada automáticamente en recepción.</p></div>
+    <div class="flow-step"><div class="flow-num">03</div><h4>Diagnóstico IEC</h4><p>Herramienta propia. Curvas IV + termografía. Mediciones enviadas al sistema automáticamente.</p></div>
+    <div class="flow-step"><div class="flow-num">04</div><h4>Recuperación</h4><p>Reacondicionamiento según categoría. Metodología CSPM con estándares TPM e ISO.</p></div>
+    <div class="flow-step"><div class="flow-num">05</div><h4>Certificación</h4><p>Sistema genera todos los protocolos automáticamente. Panel + CO₂ + ESG listos.</p></div>
+  </div>
+</section>
+
+<!-- TECNOLOGÍA -->
+<section class="section section-slate" id="tecnologia">
+  <div class="section-label">Tecnología propia</div>
+  <h2 class="section-title">El sistema que hace<br><span>todo auditable</span></h2>
+  <div class="tech-layout">
+    <div class="tech-screen">
+      <div class="screen-bar"><span></span><span></span><span></span></div>
+      <div class="screen-id">PANEL ID: PAN-2025-00847 · CERTIFICADO CSPM</div>
+      <div class="screen-row"><span class="lbl">Fabricante</span><span class="val">Hanwha Q CELLS Q72712M</span></div>
+      <div class="screen-row"><span class="lbl">Categoría</span><span class="val gold">A — Daño superficial de vidrio</span></div>
+      <div class="screen-row"><span class="lbl">Potencia residual medida</span><span class="val ok">81.4% (297W de 365W)</span></div>
+      <div class="screen-row"><span class="lbl">Curva IV</span><span class="val ok">✓ Conforme IEC 61215</span></div>
+      <div class="screen-row"><span class="lbl">Termografía</span><span class="val ok">✓ Sin hot-spots activos</span></div>
+      <div class="screen-row"><span class="lbl">E1 — Fabricación evitada</span><span class="val">217.1 kg CO₂eq</span></div>
+      <div class="screen-row"><span class="lbl">E2 — Transporte evitado</span><span class="val">5.2 kg CO₂eq</span></div>
+      <div class="screen-row"><span class="lbl">E3 — Disposición evitada</span><span class="val">21.1 kg CO₂eq</span></div>
+      <div class="screen-row"><span class="lbl">E4 — Generación 10 años</span><span class="val ok">2,499.6 kg CO₂eq</span></div>
+      <div class="screen-total">
+        <span class="st-label">CO₂eq total evitado</span>
+        <span class="st-val">2,743 kg</span>
+      </div>
+    </div>
+    <div class="tech-features">
+      <div class="feat"><div class="feat-icon">🔧</div><div><h4>Herramienta de Medición Propia</h4><p>Desarrollada internamente. Toma todas las mediciones eléctricas automáticamente y las envía al sistema. Sin intervención manual, sin error humano.</p></div></div>
+      <div class="feat"><div class="feat-icon">⚡</div><div><h4>Cálculo Automático de CO₂</h4><p>El sistema calcula los cuatro componentes del CO₂eq evitado en el momento del diagnóstico, usando los factores oficiales de cada fuente citada.</p></div></div>
+      <div class="feat"><div class="feat-icon">🔗</div><div><h4>Trazabilidad Completa</h4><p>Cada panel tiene un ID único con historial desde el parque solar de origen hasta la entrega. Auditadle por terceros en cualquier momento.</p></div></div>
+      <div class="feat"><div class="feat-icon">📄</div><div><h4>Exportación ESG Inmediata</h4><p>Reportes exportables compatibles con GRI, SASB y TCFD. Listos para auditores internacionales desde el día de entrega.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORÍAS -->
+<section class="section section-dark">
+  <div class="section-label">Sistema de clasificación</div>
+  <h2 class="section-title">Tres categorías.<br><span>Transparencia total.</span></h2>
+  <div class="cat-grid">
+    <div class="cat-card">
+      <div class="cat-label">CAT A</div>
+      <h4>Daño superficial / vidrio</h4>
+      <p>Daño físico externo sin afectación eléctrica significativa. Proceso más rápido, mayor capacidad residual.</p>
+      <div class="cat-spec">Potencia residual: <strong>≥ 80%</strong></div>
+      <div class="cat-co2">CO₂eq evitado: ~2.74 t</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-label">CAT B</div>
+      <h4>Daño eléctrico leve</h4>
+      <p>Degradación eléctrica parcial. Recuperación técnica específica. Capacidad residual verificada y certificada.</p>
+      <div class="cat-spec">Potencia residual: <strong>70–79%</strong></div>
+      <div class="cat-co2">CO₂eq evitado: ~2.43–2.72 t</div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-label">CAT C</div>
+      <h4>Daño complejo</h4>
+      <p>Daño multicausal. Mayor tiempo de proceso. Resultado igualmente certificado bajo protocolos IEC.</p>
+      <div class="cat-spec">Potencia residual: <strong>60–69%</strong></div>
+      <div class="cat-co2">CO₂eq evitado: ~2.12–2.40 t</div>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--muted);max-width:700px;line-height:1.7;">La categoría y el CO₂eq evitado exacto quedan registrados en el certificado individual de cada panel. El comprador sabe exactamente qué está adquiriendo antes de cualquier propuesta.</p>
+</section>
+
+<!-- USOS -->
+<section class="section section-slate" id="usos">
+  <div class="section-label">Aplicaciones</div>
+  <h2 class="section-title">Cómo usás los paneles<br><span>en tu operación</span></h2>
+  <div class="uses-grid">
+    <div class="use-card"><div class="use-icon">🏭</div><h4>Planta Solar Propia</h4><p>Planta generadora in situ con paneles recuperados. Reducción de OPEX eléctrico + CO₂ generado neteable (Scope 2) + CO₂eq evitado por panel (Scope 3).</p><span class="use-tag">Energía + ESG Doble</span></div>
+    <div class="use-card"><div class="use-icon">🏘️</div><h4>Electrificación Comunitaria</h4><p>Paneles para comunidades del área de influencia. Escuelas, centros de salud, instalaciones sociales — con documentación de impacto incluida.</p><span class="use-tag">Comunidad + Licencia Social</span></div>
+    <div class="use-card"><div class="use-icon">💡</div><h4>Sistemas Auxiliares</h4><p>Iluminación perimetral, monitoreo ambiental, telemetría, bombeo de agua, campamentos. Energía autónoma donde la red no llega.</p><span class="use-tag">Operación</span></div>
+    <div class="use-card"><div class="use-icon">🔌</div><h4>Neteo de Consumo Eléctrico</h4><p>Generación propia que se descuenta del consumo de red. Reducción directa de factura eléctrica operativa, reportable en Scope 2.</p><span class="use-tag">OPEX + Scope 2</span></div>
+    <div class="use-card"><div class="use-icon">📡</div><h4>Infraestructura Remota</h4><p>Estaciones meteorológicas, sensores ambientales, comunicaciones en zonas sin acceso a red eléctrica convencional.</p><span class="use-tag">Operación Remota</span></div>
+    <div class="use-card"><div class="use-icon">🌱</div><h4>Portfolio ESG Combinado</h4><p>Generación propia + impacto comunitario + CO₂eq evitado certificado. Tres indicadores positivos, una sola decisión de compra.</p><span class="use-tag">ESG Múltiple</span></div>
+  </div>
+</section>
+
+<!-- ESG -->
+<section class="section section-dark" id="esg">
+  <div class="section-label">Impacto ambiental</div>
+  <h2 class="section-title">Lo que podés reportar<br><span class="grn">desde el día uno</span></h2>
+  <div class="esg-layout">
+    <div class="esg-text">
+      <h2>ESG que <span>aguanta</span> cualquier auditoría</h2>
+      <p>El CO₂eq evitado CSPM no es un número estimado. Es el resultado de un análisis de ciclo de vida completo — cuatro componentes, cuatro fuentes citadas, un certificado por panel.</p>
+      <p>Fabricación (Hanwha Q CELLS LCA) + transporte (IMO GHG Study 2020) + disposición final (EPJ Photovoltaics 2024) + generación limpia (Secretaría de Energía Argentina). Tus auditores pueden verificar cada número.</p>
+    </div>
+    <div class="esg-checklist">
+      <div class="esg-check"><div class="check-icon">✓</div><div><h5>GRI 306 — Residuos</h5><p>Documentación de origen, tratamiento y destino de RAEE fotovoltaico compatible con GRI Standards 306.</p></div></div>
+      <div class="esg-check"><div class="check-icon">✓</div><div><h5>SASB EM-MM-150a.1</h5><p>Trazabilidad de residuos de alto riesgo según estándar SASB específico para industria minera.</p></div></div>
+      <div class="esg-check"><div class="check-icon">✓</div><div><h5>Scope 3 — Bienes adquiridos</h5><p>217 kg CO₂eq evitados por panel (fabricación) + 5 kg (transporte) + 21 kg (disposición). Total: 243 kg por panel en Scope 3 inmediato.</p></div></div>
+      <div class="esg-check"><div class="check-icon">✓</div><div><h5>Scope 2 — Energía propia</h5><p>2,500 kg CO₂eq por panel en 10 años de generación limpia vs. red argentina (0.4507 kg CO₂/kWh — Sec. Energía Argentina).</p></div></div>
+      <div class="esg-check"><div class="check-icon">✓</div><div><h5>Marco TCFD</h5><p>Soporte para divulgación de estrategias de transición energética y reducción de riesgos climáticos.</p></div></div>
+      <div class="esg-check"><div class="check-icon">✓</div><div><h5>ISO 14064-1</h5><p>Documentación compatible con inventario de GEI organizacional bajo ISO 14064-1.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<div class="community-band">
+  <div class="comm-left"><h2>Licencia social.<br>No palabras.<br>Activos reales.</h2><p>Los paneles CSPM son un vehículo concreto de compromiso comunitario. No son donaciones — son infraestructura de energía sostenible con impacto medible, documentado y verificable. Cada panel instalado en una comunidad también suma a tu cuenta de CO₂eq evitado.</p></div>
+  <div class="comm-items">
+    <div class="comm-item"><div class="comm-dot"></div><p>Electrificación de escuelas, centros de salud y espacios comunitarios en el área de influencia minera<span>Impacto social verificable y reportable</span></p></div>
+    <div class="comm-item"><div class="comm-dot"></div><p>Energía autónoma para comunidades rurales sin acceso a red convencional<span>Autonomía energética local documentada</span></p></div>
+    <div class="comm-item"><div class="comm-dot"></div><p>Documentación de impacto social por proyecto para reportes de responsabilidad social<span>Compatible con estándares de reporte social internacional</span></p></div>
+    <div class="comm-item"><div class="comm-dot"></div><p>Paneles de economía circular como símbolo tangible del compromiso con el territorio<span>Comunicación ESG con activos reales y verificables</span></p></div>
+  </div>
+</div>
+
+<!-- CREDENTIAL -->
+<div class="cred-section">
+  <div class="cred-seal">RAEE<br>FV</div>
+  <div class="cred-content">
+    <h3>Único operador RAEE fotovoltaico habilitado en San Juan</h3>
+    <p>Habilitación otorgada por la Subsecretaría de Medio Ambiente y Desarrollo Sustentable de la Provincia de San Juan. Los paneles CSPM son los únicos con origen legalmente gestionado, trazabilidad completa desde el parque solar de origen, y CO₂eq evitado calculado bajo metodología propia con fuentes internacionales verificables.</p>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-band">
+  <blockquote>"Cada panel CSPM evita 2.74 toneladas de CO₂eq.<br>Documentadas. Auditables. Listas para tus reportes."</blockquote>
+  <cite>— CSPM · Circularidad Solar & Photovoltaic Management · San Juan, Argentina</cite>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="contacto">
+  <div>
+    <div class="section-label">Siguiente paso</div>
+    <h2>¿Cuántos paneles<br>necesita tu<br><span>operación hoy?</span></h2>
+    <p>Te armamos una propuesta a medida: categoría de paneles, capacidad de generación estimada, CO₂eq total certificado y aplicaciones recomendadas para tu operación. Sin compromiso. En 48 horas.</p>
+  </div>
+  <div class="cta-right">
+    <a href="#" class="cta-btn">Solicitar propuesta a medida</a>
+    <a href="#" class="cta-btn outline">Descargar metodología CO₂</a>
+    <p class="contact-info">San Juan · Argentina<br>contacto@cspm.com.ar · cspm.com.ar</p>
+  </div>
+</section>
+
+</body>
+</html>
